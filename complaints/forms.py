@@ -18,6 +18,11 @@ class LoginForm(forms.Form):
 
 
 class RegisterForm(forms.Form):
+    login = forms.CharField(max_length=64, label='Login', widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'id': 'inputEmail',
+        'placeholder': 'inputLogin'
+    }))
     firstname = forms.CharField(max_length=64, label='Login', widget=forms.TextInput(attrs={
         'class': 'form-control',
         'id': 'inputFirstName',
@@ -72,6 +77,8 @@ class RegisterForm(forms.Form):
 
         if len(User.objects.filter(email=self.cleaned_data['email'])) != 0:
             error.update({'email': 'This email address is already taken!'})
+        if len(User.objects.filter(username=self.cleaned_data['login'])) != 0:
+            error.update({'login': 'This login is already taken!'})
 
         if len(self.cleaned_data['companyVat']) != 9:
             error.update({'companyVat': 'The vat number must only have 9 numbers!'})

@@ -8,7 +8,10 @@ from django.views import View
 from django.views.generic import CreateView, FormView
 
 from complaints.forms import LoginForm, RegisterForm
+from .models import Company
 
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 # Create your views here.
 
@@ -53,11 +56,30 @@ class RegisterView(View):
 
     def post(self, request):
         form = RegisterForm(request.POST)
-        ctx = {
-            'form': form,
-        }
+        ctx = {}
+
         if form.is_valid():
-            ctx.update({'message': 'Jest git'})
+            company = Company.objects.create(
+                name=form.cleaned_data['companyName'],
+                nip=form.cleaned_data['companyVat']
+            )
+            user_atr = {
+                'first_name': form.cleaned_data['firstname'],
+                'last_name': form.cleaned_data['lastname'],
+                'company': company,
+                'is_active': 0,
+                'user_custom_role': 2
+            }
+            user = User.objects.create_user(
+                form.cleaned_data['login'],
+                email=form.cleaned_data['email'],
+                password=form.cleaned_data['password'],
+                **user_atr
+            )
+            ctx.update({'message': 'Account added, wait for administrator activation.'})
         else:
-            ctx.update({'message': 'Hasla sa rozne'})
+            ctx.update({
+                'message': 'The form contains errors, please correct them',
+                'form': form
+            })
         return render(request, 'register.html', ctx)

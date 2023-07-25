@@ -6,7 +6,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 
 class Company(models.Model):
     name = models.CharField(max_length=64, null=True, blank=True)
-    nip = models.CharField(max_length=9, primary_key=True)
+    nip = models.CharField(max_length=16, primary_key=True)
     adress = models.CharField(max_length=64, null=True, blank=True)
 
 
