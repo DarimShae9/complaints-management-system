@@ -2,7 +2,7 @@ from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMix
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import View
 
 from django.views.generic import CreateView, FormView
@@ -11,6 +11,11 @@ from complaints.forms import LoginForm, RegisterForm
 
 
 # Create your views here.
+
+
+class HomeView(View):
+    def get(self, request):
+        return redirect('/login/')
 
 
 class LoginView(View):
@@ -50,6 +55,9 @@ class RegisterView(View):
         form = RegisterForm(request.POST)
         ctx = {
             'form': form,
-            'message': 'Przesłano POST !'
         }
+        if form.is_valid():
+            ctx.update({'message': 'Jest git'})
+        else:
+            ctx.update({'message': 'Hasla sa rozne'})
         return render(request, 'register.html', ctx)

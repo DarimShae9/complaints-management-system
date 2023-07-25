@@ -39,19 +39,19 @@
                                                 </div>
                                             </div>
                                             <div class="form-floating mb-3">
-                                                {{ form.email }}
+                                                {{ form.email }}<span style="color: red">{{ form.email.errors }}</span>
                                                 <label for="inputEmail">Email address</label>
                                             </div>
                                             <div class="row mb-3">
                                                 <div class="col-md-6">
                                                     <div class="form-floating mb-3 mb-md-0">
-                                                        {{ form.password }}
+                                                        {{ form.password }}<span style="color: red">{{ form.password.errors }}</span>
                                                         <label for="inputPassword">Password</label>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-floating mb-3 mb-md-0">
-                                                        {{ form.passwordConf }}
+                                                        {{ form.passwordConf }}<span style="color: red">{{ form.passwordConf.errors }}</span>
                                                         <label for="inputPasswordConfirm">Confirm Password</label>
                                                     </div>
                                                 </div>
@@ -67,7 +67,7 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-floating">
-                                                        {{ form.companyVat }}
+                                                        {{ form.companyVat }} <span style="color: red">{{ form.companyVat.errors }}</span>
                                                         <label for="inputCompanyVAT">VAT number</label>
                                                     </div>
                                                 </div>
