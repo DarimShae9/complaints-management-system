@@ -23,6 +23,8 @@ class HomeView(View):
 
 class LoginView(View):
     def get(self, request):
+        if request.user.is_authenticated:
+            return redirect('/panel/home/')
         ctx = {
             'form': LoginForm(),
             'message': 'Wpisz dane aby się zalogować',
@@ -40,7 +42,7 @@ class LoginView(View):
                                 password=form.cleaned_data['password'])
             if user is not None:
                 login(request, user)
-                ctx.update({'message': 'udało się zalogować'})
+                return redirect('/panel/home/')
             else:
                 ctx.update({'message': "Niepoprawny login lub hasło"})
         return render(request, 'login.html', ctx)
@@ -48,13 +50,18 @@ class LoginView(View):
 
 class RegisterView(View):
     def get(self, request):
+        if request.user.is_authenticated:
+            return redirect('/panel/home/')
+
         ctx = {
             'form': RegisterForm()
         }
         return render(request, 'register.html', ctx)
 
-
     def post(self, request):
+        if request.user.is_authenticated:
+            return redirect('/panel/home/')
+
         form = RegisterForm(request.POST)
         ctx = {}
 
@@ -83,3 +90,17 @@ class RegisterView(View):
                 'form': form
             })
         return render(request, 'register.html', ctx)
+
+
+class LogoutView(View):
+    def get(self, request):
+        logout(request)
+        return redirect('/login/')
+
+
+class PanelHomeView(View):
+    def get(self, request):
+        if not request.user.is_authenticated:
+            return redirect('/login/')
+
+        return render(request, 'user/home.html')

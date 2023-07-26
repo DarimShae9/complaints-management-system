@@ -25,7 +25,7 @@
                                             <div class="form-floating mb-3">
                                                 <!--<input class="form-control" id="inputEmail" type="email" placeholder="name@example.com" />-->
                                                 {{ form.login }}
-                                                <label for="inputEmail">Email address / login</label>
+                                                <label for="inputEmail">Login</label>
                                             </div>
                                             <div class="form-floating mb-3">
                                                 <!-- <input class="form-control" id="inputPassword" type="password" placeholder="Password" /> -->
@@ -58,8 +58,10 @@
                             <div class="text-muted">Copyright &copy; K.Krawczyk 2023</div>
                             <div>
                                 <a href="#">Privacy Policy</a>
-                                &middot;
+                                -
                                 <a href="#">Terms &amp; Conditions</a>
+
+                                {% if current_user %}- <a href="/logout/">Logout {{ current_user.username }}</a>{% endif %}
                             </div>
                         </div>
                     </div>

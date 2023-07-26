@@ -23,17 +23,17 @@ class RegisterForm(forms.Form):
         'id': 'inputEmail',
         'placeholder': 'inputLogin'
     }))
-    firstname = forms.CharField(max_length=64, label='Login', widget=forms.TextInput(attrs={
+    firstname = forms.CharField(max_length=64, label='First Name', widget=forms.TextInput(attrs={
         'class': 'form-control',
         'id': 'inputFirstName',
         'placeholder': 'inputFirstName'
     }))
-    lastname = forms.CharField(max_length=64, label='Login', widget=forms.TextInput(attrs={
+    lastname = forms.CharField(max_length=64, label='Last Name', widget=forms.TextInput(attrs={
         'class': 'form-control',
         'id': 'inputFirstName',
         'placeholder': 'inputLastName'
     }))
-    email = forms.EmailField(max_length=64, label='Login', widget=forms.TextInput(attrs={
+    email = forms.EmailField(max_length=64, label='email', widget=forms.TextInput(attrs={
         'class': 'form-control',
         'id': 'inputEmail',
         'placeholder': 'inputEmail'
@@ -59,6 +59,10 @@ class RegisterForm(forms.Form):
         'placeholder': 'inputCompanyVAT'
     }))
 
+    # def clean_email(self):
+    #     if User.objects.filter(email=self.cleaned_data['email']):
+    #         raise forms.ValidationError('This email address is already taken!')
+
     def clean(self):
         """
         Validation of basic data such as the
@@ -75,9 +79,10 @@ class RegisterForm(forms.Form):
         if self.cleaned_data['password'] != self.cleaned_data['passwordConf']:
             error.update({'password': "The passwords are not the same!"})
 
-        if len(User.objects.filter(email=self.cleaned_data['email'])) != 0:
-            error.update({'email': 'This email address is already taken!'})
-        if len(User.objects.filter(username=self.cleaned_data['login'])) != 0:
+        # if User.objects.filter(email=self.cleaned_data['email']):
+        #     error.update({'email': 'This email address is already taken!'})
+
+        if User.objects.filter(username=self.cleaned_data['login']):
             error.update({'login': 'This login is already taken!'})
 
         if len(self.cleaned_data['companyVat']) != 9:

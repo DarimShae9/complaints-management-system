@@ -1,0 +1,80 @@
+{% extends 'user/../base.html' %}
+{% block site_title %}User management{% endblock %}
+{% block main %}
+<main>
+    <div class="container-fluid px-4">
+        <h1 class="mt-4">Dashboard</h1>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item"><a href="">User management</a></li>
+            <li class="breadcrumb-item active">User management</li>
+        </ol>
+        <div class="card mb-4">
+            <div class="card-body">
+                User management, you can accept or block the user.
+            </div>
+        </div>
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-table me-1"></i>
+                Userlist:
+            </div>
+            <div class="card-body">
+                <table id="datatablesSimple">
+                    <thead>
+                        <tr>
+                            <th>ID.</th>
+                            <th>username</th>
+                            <th>email</th>
+                            <th>last login</th>
+                            <th>date joined</th>
+                            <th>user_custom_role</th>
+                            <th>vat number</th>
+                            <th>is active</th>
+                            <th>switch activ</th>
+                            <th>edit</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>Function</th>
+                            <th>List</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td>{{ user.id }}</td>
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.last_login }}</td>
+                            <td>{{ user.date_joined }}</td>
+                            <td>{{ user.user_custom_role }}</td>
+                            <td>{{ user.company_id }}</td>
+                            <td>{{ user.is_active }}</td>
+                            <td>
+                                {% if user.is_superuser %}
+                                    it's admin
+                                {% else %}
+                                    {% if user.is_active %}
+                                        <a class="btn btn-danger" href="/adm/0/{{ user.id }}/">deactivate</a>
+                                    {% else %}
+                                        <a class="btn btn-primary" href="/adm/1/{{ user.id }}/">activate</a>
+                                    {% endif %}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if user.is_superuser %}
+                                    it's admin
+                                {% else %}
+                                        <a class="btn btn-warning" href="/adm/edit/{{ user.id }}/">edit</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

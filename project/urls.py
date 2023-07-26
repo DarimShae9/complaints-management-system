@@ -17,12 +17,16 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from complaints.views import LoginView, RegisterView, HomeView
-
+from complaints.views import LoginView, RegisterView, HomeView, LogoutView, PanelHomeView
+from complaints.views_admin import AdminUser, AdminUserActivateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('adm/user/', AdminUser.as_view()),
+    path('adm/<int:activate>/<int:user_id>/', AdminUserActivateView.as_view()),
     path('login/', LoginView.as_view()),
     path('register/', RegisterView.as_view()),
-    path('', HomeView.as_view())
+    path('', HomeView.as_view()),
+    path('logout/', LogoutView.as_view()),
+    path('panel/home/', PanelHomeView.as_view())
 ]

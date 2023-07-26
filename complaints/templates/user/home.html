@@ -1,0 +1,70 @@
+{% extends 'user/../base.html' %}
+{% block site_title %}Home Sweet Home!{% endblock %}
+{% block main %}
+<main>
+    <div class="container-fluid px-4">
+        <h1 class="mt-4">Dashboard</h1>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item"><a href="">Dashboard</a></li>
+            <li class="breadcrumb-item active">Tables</li>
+        </ol>
+        <div class="card mb-4">
+            <div class="card-body">
+                Changelog of basic functions created for the project
+            </div>
+        </div>
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-table me-1"></i>
+                Changelog:
+            </div>
+            <div class="card-body">
+                <table id="datatablesSimple">
+                    <thead>
+                        <tr>
+                            <th style="width: 20%;">Function</th>
+                            <th>List</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>Function</th>
+                            <th>List</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        <tr>
+                            <td>logowanie</td>
+                            <td><ul>
+                                <li>strona logowania</li>
+                                <li>funkcja logowania</li>
+                            </ul></td>
+                        </tr>
+                        <tr>
+                            <td>rejestracja kont</td>
+                            <td>
+                                <ul>
+                                    <li>nowa rejestracja = nowa firma, konto typu organizacja</li>
+                                    <li>typ konta: admin, organizacja, pracownik</li>
+                                    <li>weryfikacja po nipie</li>
+                                    <li>konieczność aktywacji konta przez administratora</li>
+                                    <li>widok rejestracji</li>
+                                    <li>walidacja rejestracji: unikalny NIP, unikalny mail, takie same hasła, min 8 znaków</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>admin panel</td>
+                            <td><ul>
+                                <li>strona z użytkownikami</li>
+                                <li>aktywacja i dezaktywacja użytkowników</li>
+                            </ul></td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}
