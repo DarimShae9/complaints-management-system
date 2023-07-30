@@ -1,0 +1,21 @@
+{% extends 'user/../base.html' %}
+{% block site_title %}User management{% endblock %}
+{% block main %}
+<main>
+    <div class="container-fluid px-4">
+        <h1 class="mt-4">
+            {% if not message %}
+            You do not have permission to view this page.
+            {% endif %} {{ message }}
+        </h1>
+        <div class="card mb-4">
+            <div class="card-body">
+                {% if not message %}
+                You do not have permission to view this page.
+                {% endif %}
+                {{ message }}
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

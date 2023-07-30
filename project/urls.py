@@ -17,7 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from complaints.views import LoginView, RegisterView, HomeView, LogoutView, PanelHomeView
+from complaints.views import LoginView, RegisterView, HomeView, LogoutView, PanelHomeView, UserAddView, UserManagementView, \
+    UserManagementActivateView
 from complaints.views_admin import AdminUser, AdminUserActivateView
 
 urlpatterns = [
@@ -28,5 +29,8 @@ urlpatterns = [
     path('register/', RegisterView.as_view()),
     path('', HomeView.as_view()),
     path('logout/', LogoutView.as_view()),
-    path('panel/home/', PanelHomeView.as_view())
+    path('panel/home/', PanelHomeView.as_view()),
+    path('panel/add_user/', UserAddView.as_view()),
+    path('panel/users/', UserManagementView.as_view()),
+    path('panel/users/<int:activate>/<int:user_id>/', UserManagementActivateView.as_view()),
 ]

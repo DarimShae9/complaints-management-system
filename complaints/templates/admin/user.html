@@ -31,7 +31,6 @@
                             <th>vat number</th>
                             <th>is active</th>
                             <th>switch activ</th>
-                            <th>edit</th>
                         </tr>
                     </thead>
                     <tfoot>
@@ -56,17 +55,10 @@
                                     it's admin
                                 {% else %}
                                     {% if user.is_active %}
-                                        <a class="btn btn-danger" href="/adm/0/{{ user.id }}/">deactivate</a>
+                                        <a class="btn btn-danger" href="{{ link }}/0/{{ user.id }}/">deactivate</a>
                                     {% else %}
-                                        <a class="btn btn-primary" href="/adm/1/{{ user.id }}/">activate</a>
+                                        <a class="btn btn-primary" href="{{ link }}/1/{{ user.id }}/">activate</a>
                                     {% endif %}
-                                {% endif %}
-                            </td>
-                            <td>
-                                {% if user.is_superuser %}
-                                    it's admin
-                                {% else %}
-                                        <a class="btn btn-warning" href="/adm/edit/{{ user.id }}/">edit</a>
                                 {% endif %}
                             </td>
                         </tr>

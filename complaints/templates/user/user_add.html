@@ -1,0 +1,76 @@
+{% extends 'user/../base.html' %}
+{% block site_title %}User management{% endblock %}
+{% block main %}
+<main>
+    <div class="container-fluid px-4">
+        <h1 class="mt-4">Add new user to your company</h1>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item"><a href="">User management</a></li>
+            <li class="breadcrumb-item active">Add User</li>
+        </ol>
+        <div class="card mb-4">
+            <div class="card-body">
+                Add a new user to your company, this person will be able to create orders / complaints and messages.
+            </div>
+        </div>
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fa-solid fa-user-plus"></i>
+                Create User:
+            </div>
+            <div class="card-body">
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    <div class="row mb-3">
+                        <h5>Dane użytkownika:</h5>
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3 mb-md-0">
+                                {{ form.login }}<span style="color: red">{{ form.login.errors }}</span>
+                                <label for="inputLogin">Login</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                {{ form.email }}<span style="color: red">{{ form.email.errors }}</span>
+                                <label for="inputEmail">Email address</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3 mb-md-0">
+                                {{ form.firstname }}
+                                <label for="inputFirstName">First name</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                {{ form.lastname }}
+                                <label for="inputLastName">Last name</label>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3 mb-md-0">
+                                {{ form.password }}<span style="color: red">{{ form.password.errors }}</span>
+                                <label for="inputPassword">Password</label>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="mt-4 mb-0">
+                        <div class="d-grid"><button type="submit" class="btn btn-primary btn-block" href="">Create User</button></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

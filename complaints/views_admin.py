@@ -18,10 +18,11 @@ User = get_user_model()
 class AdminUser(View):
     def get(self, request):
         if not request.user.is_superuser:
-            return redirect('/login/')
+            return render(request, 'admin/no_permissions.html')
 
         ctx = {
-            'users': User.objects.all()
+            'users': User.objects.all(),
+            'link': "/adm"
         }
         return render(request, 'admin/user.html', ctx)
 
@@ -29,7 +30,7 @@ class AdminUser(View):
 class AdminUserActivateView(View):
     def get(self, request, activate, user_id):
         if not request.user.is_superuser:
-            return redirect('/login/')
+            return render(request, 'admin/no_permissions.html')
 
         user = User.objects.get(pk=user_id)
         user.is_active = activate

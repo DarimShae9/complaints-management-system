@@ -7,7 +7,7 @@ from django.views import View
 
 from django.views.generic import CreateView, FormView
 
-from complaints.forms import LoginForm, RegisterForm
+from complaints.forms import LoginForm, RegisterForm, AddCompanyUserForm
 from .models import Company
 
 from django.contrib.auth import get_user_model
@@ -104,3 +104,72 @@ class PanelHomeView(View):
             return redirect('/login/')
 
         return render(request, 'user/home.html')
+
+
+class UserAddView(View):
+    """
+    View only for the business owner.
+    Ability to create accounts for your own employees.
+    """
+    def get(self, request):
+        if request.user.user_custom_role != 2:
+            return render(request, 'admin/no_permissions.html', {'message': 'Do you want to create a user of your company? Ask your boss for access.'})
+        ctx = {
+            'form': AddCompanyUserForm()
+        }
+        return render(request, 'user/user_add.html', ctx)
+
+    def post(self, request):
+        if request.user.user_custom_role != 2:
+            return render(request, 'admin/no_permissions.html')
+        form = AddCompanyUserForm(request.POST)
+
+        if form.is_valid():
+            ctx = {
+                'message': "New user created!"
+            }
+
+            more_data = {
+                'user_custom_role': 3,
+                'company_id': request.user.company_id,
+                'first_name': form.cleaned_data['firstname'],
+                'last_name': form.cleaned_data['lastname'],
+            }
+            User.objects.create_user(
+                username=form.cleaned_data['login'],
+                email=form.cleaned_data['email'],
+                password=form.cleaned_data['password'],
+                **more_data
+            )
+            return render(request, 'admin/no_permissions.html', ctx)
+        else:
+            ctx = {
+                'form': form
+            }
+            return render(request, 'user/user_add.html', ctx)
+
+class UserManagementView(View):
+    def get(self, request):
+        if request.user.user_custom_role != 2:
+            return render(request, 'admin/no_permissions.html', {'message': 'Want to manage users? Ask your boss for access.'})
+
+        ctx = {
+            'users': User.objects.filter(company_id=request.user.company_id),
+            'link': '/panel/users'
+        }
+        return render(request, 'admin/user.html', ctx)
+
+
+class UserManagementActivateView(View):
+    def get(self, request, activate, user_id):
+        if request.user.user_custom_role != 2:
+            return render(request, 'admin/no_permissions.html',
+                          {'message': 'Want to manage users? Ask your boss for access.'})
+
+        user = User.objects.get(pk=user_id)
+        if user.company_id != request.user.company_id:
+            return render(request, 'admin/no_permissions.html',
+                          {'message': 'This is not your employee!!'})
+        user.is_active = activate
+        user.save()
+        return redirect('/panel/users/')
