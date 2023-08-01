@@ -34,7 +34,7 @@ STATUS_LIST = (
 
 class Product(models.Model):
     name = models.CharField(max_length=64)
-    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True, blank=True)
     price = models.FloatField(null=True)
 
 

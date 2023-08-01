@@ -145,9 +145,35 @@ class AddCompanyUserForm(forms.Form):
 
         raise forms.ValidationError(error)
 
+
 class NewCompaintForm(forms.Form):
     number = forms.CharField(max_length=64, label='Order_ID', widget=forms.TextInput(attrs={
         'class': 'form-control',
         'id': 'inputOrderID',
         'placeholder': 'inputLogin'
+    }))
+
+
+class MessageForm(forms.Form):
+    text = forms.CharField(max_length=64, label='Order_ID', widget=forms.Textarea(attrs={
+        'class': 'form-control',
+        'id': 'inputOrderID',
+        'placeholder': 'inputLogin',
+        'rows': '5'
+    }))
+
+
+class ProductForm(forms.Form):
+    name = forms.CharField(max_length=64, label='ProductName', widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'id': 'inputProductName',
+        'placeholder': 'Product Name',
+    }))
+    price = forms.CharField(max_length=64, label='ProductPrice', widget=forms.NumberInput(attrs={
+        'class': 'form-control',
+        'id': 'inputPrice',
+        'placeholder': '0',
+        'value': '0',
+        'step': '0.1',
+        'min': 0,
     }))

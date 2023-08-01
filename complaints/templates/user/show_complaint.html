@@ -65,7 +65,30 @@
                                 </tr>
                             </tfoot>
                         </table>
+                        <br>
+                        <form method="POST" action="/panel/add-product/{{ order.id }}/">{% csrf_token %}
+                            <div class="row mb-3">
+                                <h5>Add product:</h5>
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3 mb-md-0">
+                                        {{ product_form.name }}<span style="color: red">{{ product_form.name.errors }}</span>
+                                        <label for="inputLogin">Product name</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        {{ product_form.price }}<span style="color: red">{{ product_form.name.errors }}</span>
+                                        <label for="inputEmail">Price</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
+                                <button type="submit" class="btn btn-primary">Add product</button>
+                            </div>
+                        </form>
                     </div>
+
+
                     <div class="card-footer small text-muted">Product list</div>
                 </div>
             </div>
@@ -96,7 +119,16 @@
                         {% endfor %}
                     </ul>
                 </div>
-
+            <form method="POST" action="/panel/add-message/{{ order.id }}/">{% csrf_token %}
+                <div class="form-floating mb-3">
+                    {{ message_form.text }}
+                    <label for="inputEmail">New Message</label>
+                </div>
+                <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
+                    <button type="submit" class="btn btn-primary">Add message</button>
+                </div>
+            </form>
+            <br>
             <div class="card-footer small text-muted">Users message</div>
         </div>
 

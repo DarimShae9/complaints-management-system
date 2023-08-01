@@ -7,8 +7,9 @@ from django.views import View
 
 from django.views.generic import CreateView, FormView
 
-from complaints.forms import LoginForm, RegisterForm, AddCompanyUserForm, NewCompaintForm
+from complaints.forms import LoginForm, RegisterForm, AddCompanyUserForm, NewCompaintForm, MessageForm, ProductForm
 from .models import Company, Order, Product, Message
+from .function import update_modification_time
 
 from django.contrib.auth import get_user_model
 User = get_user_model()
@@ -186,7 +187,7 @@ class ComplaintListView(View):
         if not request.user.is_authenticated:
             return redirect('/login/')
         ctx = {
-            'orders': Order.objects.filter(company=request.user.company_id)
+            'orders': Order.objects.filter(company=request.user.company_id).order_by('-modification_date')
         }
         return render(request, 'user/complaints_list.html', ctx)
 
@@ -235,7 +236,69 @@ class ShowComplaintView(View):
         ctx = {
             'order': order,
             'products': Product.objects.filter(order=order),
-            'messages': Message.objects.filter(order=order)
+            'messages': Message.objects.filter(order=order),
+            'message_form': MessageForm(),
+            'product_form': ProductForm(),
         }
         return render(request, 'user/show_complaint.html', ctx)
 
+
+class AddMessageView(View):
+    def post(self, request, order_id):
+        if not request.user.is_authenticated:
+            return redirect('/login/')
+        if len(Order.objects.filter(pk=order_id)) != 1:
+            return render(request, 'admin/no_permissions.html', {'message': 'There is no such order'})
+        order = Order.objects.get(pk=order_id)
+        if request.user.company_id != order.company_id:
+            return render(request, 'admin/no_permissions.html', {'message': 'This is not your order!'})
+
+        form = MessageForm(request.POST)
+        if form.is_valid():
+            Message.objects.create(
+                user=request.user,
+                order=order,
+                text=form.cleaned_data['text']
+            )
+            update_modification_time(order.id)
+            return redirect(f'/panel/show-complaint/{order_id}/')
+        ctx = {
+            'order': order,
+            'products': Product.objects.filter(order=order),
+            'messages': Message.objects.filter(order=order),
+            'message_form': MessageForm(),
+            'product_form': ProductForm(),
+        }
+        return render(request, 'user/show_complaint.html', ctx)
+
+
+class AddProductView(View):
+    def post(self, request, order_id):
+        if not request.user.is_authenticated:
+            return redirect('/login/')
+        if len(Order.objects.filter(pk=order_id)) != 1:
+            return render(request, 'admin/no_permissions.html', {'message': 'There is no such order'})
+        order = Order.objects.get(pk=order_id)
+        if request.user.company_id != order.company_id:
+            return render(request, 'admin/no_permissions.html', {'message': 'This is not your order!'})
+
+        form = ProductForm(request.POST)
+        if form.is_valid():
+            product = Product.objects.create(
+                name=form.cleaned_data['name'],
+                price=form.cleaned_data['price']
+            )
+            order = Order.objects.get(pk=order_id)
+            order.product.add(product)
+            order.save()
+
+            update_modification_time(order.id)
+            return redirect(f'/panel/show-complaint/{order_id}/')
+        ctx = {
+            'order': order,
+            'products': Product.objects.filter(order=order),
+            'messages': Message.objects.filter(order=order),
+            'message_form': MessageForm(),
+            'product_form': ProductForm(),
+        }
+        return render(request, 'user/show_complaint.html', ctx)
