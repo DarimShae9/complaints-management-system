@@ -7,8 +7,8 @@ from django.views import View
 
 from django.views.generic import CreateView, FormView
 
-from complaints.forms import LoginForm, RegisterForm, AddCompanyUserForm
-from .models import Company
+from complaints.forms import LoginForm, RegisterForm, AddCompanyUserForm, NewCompaintForm
+from .models import Company, Order, Product, Message
 
 from django.contrib.auth import get_user_model
 User = get_user_model()
@@ -120,6 +120,8 @@ class UserAddView(View):
         return render(request, 'user/user_add.html', ctx)
 
     def post(self, request):
+        if not request.user.is_authenticated:
+            return redirect('/login/')
         if request.user.user_custom_role != 2:
             return render(request, 'admin/no_permissions.html')
         form = AddCompanyUserForm(request.POST)
@@ -150,6 +152,8 @@ class UserAddView(View):
 
 class UserManagementView(View):
     def get(self, request):
+        if not request.user.is_authenticated:
+            return redirect('/login/')
         if request.user.user_custom_role != 2:
             return render(request, 'admin/no_permissions.html', {'message': 'Want to manage users? Ask your boss for access.'})
 
@@ -162,6 +166,8 @@ class UserManagementView(View):
 
 class UserManagementActivateView(View):
     def get(self, request, activate, user_id):
+        if not request.user.is_authenticated:
+            return redirect('/login/')
         if request.user.user_custom_role != 2:
             return render(request, 'admin/no_permissions.html',
                           {'message': 'Want to manage users? Ask your boss for access.'})
@@ -173,3 +179,63 @@ class UserManagementActivateView(View):
         user.is_active = activate
         user.save()
         return redirect('/panel/users/')
+
+
+class ComplaintListView(View):
+    def get(self, request):
+        if not request.user.is_authenticated:
+            return redirect('/login/')
+        ctx = {
+            'orders': Order.objects.filter(company=request.user.company_id)
+        }
+        return render(request, 'user/complaints_list.html', ctx)
+
+
+class AddCompaintView(View):
+    def get(self, request):
+        if not request.user.is_authenticated:
+            return redirect('/login/')
+        ctx = {
+            'form': NewCompaintForm()
+        }
+        return render(request, 'user/add_complaint.html', ctx)
+
+
+    def post(self, request):
+        if not request.user.is_authenticated:
+            return redirect('/login/')
+
+        form = NewCompaintForm(request.POST)
+        if form.is_valid():
+            more_data = {
+                'company_id': request.user.company_id,
+            }
+            order = Order.objects.create(
+                number=form.cleaned_data['number'],
+                **more_data
+            )
+            return redirect(f'/panel/show-complaint/{order.id}/')
+
+        ctx = {
+            'form': form
+        }
+        return redirect('/panel/add-complaint/', ctx)
+
+
+class ShowComplaintView(View):
+    def get(self, request, complaint_id):
+        if not request.user.is_authenticated:
+            return redirect('/login/')
+        if len(Order.objects.filter(pk=complaint_id)) != 1:
+            return render(request, 'admin/no_permissions.html', {'message': 'There is no such order'})
+        order = Order.objects.get(pk=complaint_id)
+        if request.user.company_id != order.company_id:
+            return render(request, 'admin/no_permissions.html', {'message': 'This is not your order!'})
+
+        ctx = {
+            'order': order,
+            'products': Product.objects.filter(order=order),
+            'messages': Message.objects.filter(order=order)
+        }
+        return render(request, 'user/show_complaint.html', ctx)
+

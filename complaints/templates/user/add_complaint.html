@@ -1,0 +1,40 @@
+{% extends 'user/../base.html' %}
+{% block site_title %}Add complaint{% endblock %}
+{% block main %}
+<main>
+    <div class="container-fluid px-4">
+        <h1 class="mt-4">Add new user to your company</h1>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item"><a href="">Dashboard</a></li>
+            <li class="breadcrumb-item active">Add Compaint</li>
+        </ol>
+        <div class="card mb-4">
+            <div class="card-body">
+                Add a new
+            </div>
+        </div>
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fa-solid fa-user-plus"></i>
+                Create Order Compaint:
+            </div>
+            <div class="card-body">
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    <div class="row mb-3">
+                        <h5>Dane użytkownika:</h5>
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3 mb-md-0">
+                                {{ form.number }}<span style="color: red">{{ form.number.errors }}</span>
+                                <label for="inputLogin">Order ID</label>
+                            </div>
+                            <br>
+                            <div class="d-grid"><button type="submit" class="btn btn-primary btn-block" href="">Add Order</button></div>
+                        </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

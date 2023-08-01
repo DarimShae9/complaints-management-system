@@ -1,0 +1,106 @@
+{% extends 'user/../base.html' %}
+{% block site_title %}Show Complaint: {{ order.number }}{% endblock %}
+{% block main %}
+<main>
+    <div class="container-fluid px-4">
+        <h1 class="mt-4">Show Complaint ID: {{ order.number }}</h1>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item"><a href="">Dashboard</a></li>
+            <li class="breadcrumb-item active">Order Data</li>
+        </ol>
+        <div class="card mb-4">
+            <div class="card-body">
+                You can edit your order here
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="fa-solid fa-circle-info"></i>
+                        Order info:
+                    </div>
+                    <div class="card-body">
+                        <h3>Order ID: {{ order.number }}</h3>
+                        <p></p>
+                        <p>Creation date: {{ order.creation_date }}</p>
+                        <p>Modification date: {{ order.modification_date }}</p>
+                    </div>
+                    <div class="card-footer small text-muted">Last Update {{ order.modification_date }}</div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        Product
+                    </div>
+                    <div class="card-body">
+                        <table id="datatablesSimple">
+                            <thead>
+                                <tr>
+                                    <th>Product ID</th>
+                                    <th>Name / title</th>
+                                    <th>price</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for product in products %}
+                                <tr>
+                                    <td>{{ product.id }}</td>
+                                    <td>{{ product.name }}</td>
+                                    <td>{{ product.price }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+
+                            <tfoot>
+                                <tr>
+                                    <th>Product ID</th>
+                                    <th>Name / title</th>
+                                    <th>price</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <div class="card-footer small text-muted">Product list</div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fa-solid fa-message"></i>
+                User message:
+            </div>
+            <div class="card-body">
+
+                <div class="chat-message">
+                    <ul class="chat">
+                        {% for message in messages %}
+                        <li class="left clearfix">
+                            <div class="chat-body clearfix">
+                                <div class="header">
+                                    <strong class="primary-font"><i class="fa-regular fa-user" style="margin-right: 5px;"></i> {{ message.user.username }}</strong>
+                                    <small class="pull-right text-muted" style="margin-left: 10px;"><i class="fa-regular fa-clock"></i> {{ message.creation_date }}</small>
+                                </div>
+                                <p>
+                                    {{ message.text }}
+                                </p>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+            <div class="card-footer small text-muted">Users message</div>
+        </div>
+
+
+    </div>
+</main>
+{% endblock %}

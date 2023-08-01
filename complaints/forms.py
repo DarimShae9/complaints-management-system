@@ -144,3 +144,10 @@ class AddCompanyUserForm(forms.Form):
             error.update({'login': 'This login is already taken!'})
 
         raise forms.ValidationError(error)
+
+class NewCompaintForm(forms.Form):
+    number = forms.CharField(max_length=64, label='Order_ID', widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'id': 'inputOrderID',
+        'placeholder': 'inputLogin'
+    }))
