@@ -24,6 +24,9 @@ class HomeView(View):
 
 
 class LoginView(View):
+    """
+    login page view
+    """
     def get(self, request):
         if request.user.is_authenticated:
             return redirect('/panel/home/')
@@ -51,6 +54,7 @@ class LoginView(View):
 
 
 class RegisterView(View):
+    """login page view"""
     def get(self, request):
         if request.user.is_authenticated:
             return redirect('/panel/home/')
@@ -95,12 +99,14 @@ class RegisterView(View):
 
 
 class LogoutView(View):
+    """logout view"""
     def get(self, request):
         logout(request)
         return redirect('/login/')
 
 
 class PanelHomeView(View):
+    """start page for logged in users, changelog by default"""
     def get(self, request):
         if not request.user.is_authenticated:
             return redirect('/login/')
@@ -153,6 +159,10 @@ class UserAddView(View):
             return render(request, 'user/user_add.html', ctx)
 
 class UserManagementView(View):
+    """
+    view only for the owner of the company
+    user can be activated and deactivated
+    """
     def get(self, request):
         if not request.user.is_authenticated:
             return redirect('/login/')
@@ -167,6 +177,7 @@ class UserManagementView(View):
 
 
 class UserManagementActivateView(View):
+    """user activation and deactivation view"""
     def get(self, request, activate, user_id):
         if not request.user.is_authenticated:
             return redirect('/login/')
@@ -184,6 +195,7 @@ class UserManagementActivateView(View):
 
 
 class ComplaintListView(View):
+    """list of all complaints"""
     def get(self, request):
         if not request.user.is_authenticated:
             return redirect('/login/')
@@ -195,6 +207,7 @@ class ComplaintListView(View):
 
 
 class AddCompaintView(View):
+    """view of adding a new complaint"""
     def get(self, request):
         if not request.user.is_authenticated:
             return redirect('/login/')
@@ -226,6 +239,7 @@ class AddCompaintView(View):
 
 
 class ShowComplaintView(View):
+    """view of a single complaint"""
     def get(self, request, complaint_id):
         if not request.user.is_authenticated:
             return redirect('/login/')
@@ -247,6 +261,7 @@ class ShowComplaintView(View):
 
 
 class AddMessageView(View):
+    """view adding a message"""
     def post(self, request, order_id):
         if not request.user.is_authenticated:
             return redirect('/login/')
@@ -276,6 +291,7 @@ class AddMessageView(View):
 
 
 class AddProductView(View):
+    """view adding a message"""
     def post(self, request, order_id):
         if not request.user.is_authenticated:
             return redirect('/login/')
@@ -309,6 +325,7 @@ class AddProductView(View):
 
 
 class ChangeStatusView(View):
+    """status changing view"""
     def post(self, request, order_id):
         if not request.user.is_authenticated:
             return redirect('/login/')

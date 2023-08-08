@@ -4,9 +4,7 @@ from datetime import datetime
 
 def update_modification_time(order_id):
     """
-    we update the modification time with every change in the order
-    :param order_id:
-    :return:
+    update the modification_date with every change in the order
     """
     order = Order.objects.get(pk=order_id)
     order.modification_date = datetime.now()

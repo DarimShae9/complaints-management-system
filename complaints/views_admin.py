@@ -16,6 +16,7 @@ User = get_user_model()
 
 
 class AdminUser(View):
+    """User management across the application, admin access only"""
     def get(self, request):
         if not request.user.is_superuser:
             return render(request, 'admin/no_permissions.html')
@@ -28,6 +29,7 @@ class AdminUser(View):
 
 
 class AdminUserActivateView(View):
+    """change active/inactive user, function only for admin"""
     def get(self, request, activate, user_id):
         if not request.user.is_superuser:
             return render(request, 'admin/no_permissions.html')
