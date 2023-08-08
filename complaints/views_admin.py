@@ -38,3 +38,4 @@ class AdminUserActivateView(View):
         user.is_active = activate
         user.save()
         return redirect('/adm/user/')
+

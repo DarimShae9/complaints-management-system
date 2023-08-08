@@ -40,14 +40,14 @@ class LoginView(View):
         form = LoginForm(request.POST)
         ctx = {
             'form': form,
-            'message': 'POST - method',
         }
         if form.is_valid():
             user = authenticate(username=form.cleaned_data['login'],
                                 password=form.cleaned_data['password'])
             if user is not None:
                 login(request, user)
-                return redirect('/panel/home/')
+                ctx.update({'message': "Zalogowany"})
+                return redirect('/panel/home/', kwargs={ 'message': 'zalogowany' })
             else:
                 ctx.update({'message': "Niepoprawny login lub hasło"})
         return render(request, 'login.html', ctx)
