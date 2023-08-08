@@ -18,7 +18,8 @@ from django.contrib import admin
 from django.urls import path
 
 from complaints.views import LoginView, RegisterView, HomeView, LogoutView, PanelHomeView, UserAddView, UserManagementView, \
-    UserManagementActivateView, ComplaintListView, AddCompaintView, ShowComplaintView, AddMessageView, AddProductView
+    UserManagementActivateView, ComplaintListView, AddCompaintView, ShowComplaintView, AddMessageView, \
+    AddProductView, ChangeStatusView
 from complaints.views_admin import AdminUser, AdminUserActivateView
 
 urlpatterns = [
@@ -38,4 +39,5 @@ urlpatterns = [
     path('panel/show-complaint/<int:complaint_id>/', ShowComplaintView.as_view()),
     path('panel/add-message/<int:order_id>/', AddMessageView.as_view()),
     path('panel/add-product/<int:order_id>/', AddProductView.as_view()),
+    path('panel/change-status/<int:order_id>/', ChangeStatusView.as_view(),)
 ]

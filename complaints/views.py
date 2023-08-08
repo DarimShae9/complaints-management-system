@@ -7,9 +7,10 @@ from django.views import View
 
 from django.views.generic import CreateView, FormView
 
-from complaints.forms import LoginForm, RegisterForm, AddCompanyUserForm, NewCompaintForm, MessageForm, ProductForm
-from .models import Company, Order, Product, Message
-from .function import update_modification_time
+from complaints.forms import LoginForm, RegisterForm, AddCompanyUserForm, NewCompaintForm, \
+    MessageForm, ProductForm, StatusForm
+from .models import Company, Order, Product, Message, STATUS_LIST
+from .function import update_modification_time, historic_entry
 
 from django.contrib.auth import get_user_model
 User = get_user_model()
@@ -187,7 +188,8 @@ class ComplaintListView(View):
         if not request.user.is_authenticated:
             return redirect('/login/')
         ctx = {
-            'orders': Order.objects.filter(company=request.user.company_id).order_by('-modification_date')
+            'orders': Order.objects.filter(company=request.user.company_id).order_by('-modification_date'),
+            'status_list': STATUS_LIST
         }
         return render(request, 'user/complaints_list.html', ctx)
 
@@ -239,6 +241,7 @@ class ShowComplaintView(View):
             'messages': Message.objects.filter(order=order),
             'message_form': MessageForm(),
             'product_form': ProductForm(),
+            'status_form': StatusForm(initial={'status': order.status}),
         }
         return render(request, 'user/show_complaint.html', ctx)
 
@@ -293,6 +296,7 @@ class AddProductView(View):
             order.save()
 
             update_modification_time(order.id)
+            historic_entry(order_id, request.user, f"User add product: {product.name}")
             return redirect(f'/panel/show-complaint/{order_id}/')
         ctx = {
             'order': order,
@@ -302,3 +306,23 @@ class AddProductView(View):
             'product_form': ProductForm(),
         }
         return render(request, 'user/show_complaint.html', ctx)
+
+
+class ChangeStatusView(View):
+    def post(self, request, order_id):
+        if not request.user.is_authenticated:
+            return redirect('/login/')
+        if len(Order.objects.filter(pk=order_id)) != 1:
+            return render(request, 'admin/no_permissions.html', {'message': 'There is no such order'})
+        order = Order.objects.get(pk=order_id)
+        if request.user.company_id != order.company_id:
+            return render(request, 'admin/no_permissions.html', {'message': 'This is not your order!'})
+
+        form = StatusForm(request.POST)
+        if form.is_valid():
+            order.status = form.cleaned_data['status']
+            order.save()
+            status = int(order.status)
+            historic_entry(order_id, request.user, f"User set status: {STATUS_LIST[status][1]}")
+            update_modification_time(order.id)
+        return redirect(f'/panel/show-complaint/{order_id}/')

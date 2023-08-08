@@ -11318,17 +11318,18 @@ small, .small {
   padding: 3px 5px;
 }
 
-.chat-message {
-  padding: 60px 20px 115px;
-}
+
 
 .chat {
     list-style: none;
     margin: 0;
 }
 
-.chat-message{
-    background: #f9f9f9;
+.chat-message {
+    background: #212529;
+    padding: 1px 20px 5px 0px;
+    margin-bottom: 15px;
+    border-radius: 5px;
 }
 
 .chat li img {
@@ -11348,7 +11349,7 @@ img {
 }
 
 .chat li.left .chat-body {
-  margin-left: 70px;
+  margin-left: 0px !important;
   background-color: #fff;
 }
 
@@ -11441,4 +11442,10 @@ a:hover, a:active, a:focus {
   outline: 0;
 }
 
+.chat-body p {
+    color: #212529;
+}
 
+.primary-font {
+    color: #0d6efd;
+}

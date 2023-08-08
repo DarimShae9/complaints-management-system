@@ -23,13 +23,13 @@ class MyUser(AbstractUser):
     company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True, blank=True)
     user_custom_role = models.IntegerField(choices=USER_ROLE, default=2)
 
-STATUS_LIST = (
-    (1, 'new'),
-    (2, 'during'),
-    (3, 'rejected'),
-    (4, 'done'),
-)
 
+STATUS_LIST = (
+    (0, 'new'),
+    (1, 'during'),
+    (2, 'rejected'),
+    (3, 'done'),
+)
 
 
 class Product(models.Model):
@@ -41,7 +41,7 @@ class Product(models.Model):
 class Order(models.Model):
     number = models.CharField(max_length=64)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
-    status = models.IntegerField(choices=STATUS_LIST, default=1)
+    status = models.IntegerField(choices=STATUS_LIST, default=0)
     creation_date = models.DateTimeField(default=datetime.now())
     modification_date = models.DateTimeField(default=datetime.now())
     product = models.ManyToManyField(Product)

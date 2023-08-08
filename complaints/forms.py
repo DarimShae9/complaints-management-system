@@ -1,5 +1,5 @@
 from django import forms
-from .models import Company
+from .models import Company, STATUS_LIST
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
@@ -176,4 +176,12 @@ class ProductForm(forms.Form):
         'value': '0',
         'step': '0.1',
         'min': 0,
+    }))
+
+
+class StatusForm(forms.Form):
+    status = forms.ChoiceField(choices=STATUS_LIST, widget=forms.Select(attrs={
+        'class': 'form-control',
+        'id': 'inputPrice',
+        'placeholder': '0'
     }))
