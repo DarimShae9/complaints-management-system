@@ -47,7 +47,12 @@
                             <td>{{ user.email }}</td>
                             <td>{{ user.last_login }}</td>
                             <td>{{ user.date_joined }}</td>
-                            <td>{{ user.user_custom_role }}</td>
+                            <td>
+                            {% if user.user_custom_role == 1 %} admin
+                            {% elif user.user_custom_role == 2 %}owner
+                            {% elif user.user_custom_role == 3 %}employer
+                            {% endif %}
+                            </td>
                             <td>{{ user.company_id }}</td>
                             <td>{{ user.is_active }}</td>
                             <td>

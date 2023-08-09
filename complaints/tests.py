@@ -4,6 +4,7 @@ User = get_user_model()
 from pytest_django.asserts import assertQuerysetEqual
 from .function import update_modification_time, historic_entry
 from datetime import datetime
+from .models import Order
 # Create your tests here.
 
 
@@ -71,3 +72,16 @@ def test_add_compaint_view(client, new_user, all_order):
     client.post('/panel/add-compaint/', {'number': '123123'})
     assert len(all_order) == 1
 
+
+@pytest.mark.django_db
+def test_complaint_list_view(client, new_user, all_order):
+    """test whether the complaint view works"""
+    client.force_login(new_user)
+    Order.objects.create(
+        number='asddsa',
+        company_id=new_user.company_id,
+    )
+    response = client.get('/panel/complaints/')
+    assert len(all_order) == 1
+    assert len(response.context['orders']) == 1
+    assertQuerysetEqual(response.context['orders'], all_order)

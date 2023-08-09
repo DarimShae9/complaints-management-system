@@ -167,7 +167,8 @@ class UserManagementView(View):
         if not request.user.is_authenticated:
             return redirect('/login/')
         if request.user.user_custom_role != 2:
-            return render(request, 'admin/no_permissions.html', {'message': 'Want to manage users? Ask your boss for access.'})
+            return render(request, 'admin/no_permissions.html',
+                          {'message': 'Want to manage users? Ask your boss for access.'})
 
         ctx = {
             'users': User.objects.filter(company_id=request.user.company_id),
@@ -184,8 +185,11 @@ class UserManagementActivateView(View):
         if request.user.user_custom_role != 2:
             return render(request, 'admin/no_permissions.html',
                           {'message': 'Want to manage users? Ask your boss for access.'})
-
         user = User.objects.get(pk=user_id)
+        if user.user_custom_role == 2:
+            return render(request, 'admin/no_permissions.html', {'message': "You can't deactivate the business owner ;)"})
+
+
         if user.company_id != request.user.company_id:
             return render(request, 'admin/no_permissions.html',
                           {'message': 'This is not your employee!!'})
